@@ -53,4 +53,20 @@ configure_fail2ban() {
     echo >> "$output_file"
 }
 
-configure_fail2ban
+
+
+
+
+check_system_logs() {
+    echo "===== Checking System Logs =====" >> "$output_file"
+    if [ -f /var/log/syslog ]; then
+        echo "Last 10 lines of /var/log/syslog:" >> "$output_file"
+        sudo tail -n 10 /var/log/syslog >> "$output_file"
+    elif [ -f /var/log/messages ]; then
+        echo "Last 10 lines of /var/log/messages:" >> "$output_file"
+        sudo tail -n 10 /var/log/messages >> "$output_file"
+    else
+        echo "System log file not found." >> "$output_file"
+    fi
+    echo >> "$output_file"
+}
