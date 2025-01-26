@@ -1,3 +1,5 @@
+output_file="/server_check_report.txt"
+
 update_system() {
     echo "===== Updating System =====" >> "$output_file"
     if command -v apt &> /dev/null; then
@@ -55,6 +57,20 @@ configure_fail2ban() {
 
 
 
+check_system_resources() {
+    echo "===== Checking System Resources =====" >> "$output_file"
+    echo "CPU Usage:" >> "$output_file"
+    top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}' >> "$output_file"
+    echo >> "$output_file"
+
+    echo "RAM Usage:" >> "$output_file"
+    free -h | grep "Mem" | awk '{print "Total: " $2, "Used: " $3, "Free: " $4}' >> "$output_file"
+    echo >> "$output_file"
+
+    echo "Disk Usage:" >> "$output_file"
+    df -h | grep -v "tmpfs" | grep -v "udev" >> "$output_file"
+    echo >> "$output_file"
+}
 
 
 check_system_logs() {
