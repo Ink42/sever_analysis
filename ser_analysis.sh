@@ -86,3 +86,28 @@ check_system_logs() {
     fi
     echo >> "$output_file"
 }
+
+send_report() {
+    local_user=""
+    ipaddress=""
+    where2save="/path/to/remote/directory"
+
+    echo "===== Sending Report to Remote PC ====="
+    scp "$output_file" "$local_user@$remote_host:$where2save"
+    if [ $? -eq 0 ]; then
+        echo "Report sent successfully to $local_user@$remote_host:$where2save."
+    else
+        echo "Failed to send the report."
+    fi
+}
+
+# Main script execution
+# check_firewall
+# update_system
+# configure_fail2ban
+# check_system_logs
+# check_system_resources
+
+send_report
+
+echo "===== Script Execution Complete ====="
